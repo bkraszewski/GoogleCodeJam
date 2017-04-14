@@ -36,41 +36,25 @@ public class CountingSheeps {
     public static void main(String args[]) throws IOException {
         String fileName = "A-large-practice";
 
-        File file = new File(String.format("./input/sheeps/%s.in", fileName));
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String inputFile = String.format("./input/sheeps/%s.in", fileName);
+        String outputFile = String.format("./output/sheeps/%s.out", fileName);
 
-        String count = reader.readLine();
-        int input = Integer.valueOf(count);
-        StringBuilder builder = new StringBuilder();
-
-        File output = new File(String.format("./output/sheeps/%s.out", fileName));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(output));
-
-        for (int a = 0; a < input; a++) {
-            String line = reader.readLine();
+        GenericLineReader reader = new GenericLineReader();
+        reader.mapInputToOutput(inputFile, outputFile, (line) -> {
             long n = Long.valueOf(line);
 
             try {
                 long value = calculateLatestNumberBeforeGoingToSleep(n);
-                String out = String.format("Case #%d: %d", a + 1, value);
-                builder.append(out);
-                writer.write(out);
+                return String.valueOf(value);
+
 
             } catch (IllegalArgumentException e) {
-                String out = String.format("Case #%d: INSOMNIA", a + 1);
-                writer.write(out);
-                builder.append(out);
-
-            } finally {
-                builder.append("\n");
-                writer.newLine();
+                return "INSOMNIA";
             }
-        }
-
-        writer.close();
-        reader.close();
-        System.out.println(builder);
+        });
     }
 
 
 }
+
+
