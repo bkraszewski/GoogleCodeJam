@@ -39,9 +39,9 @@ class TidyNumbersTest {
     }
 
     @Test
-    public void shouldFindZeroIndex() {
-        assertEquals(0, TidyNumbers.findMaxUnSortedIndex("132"));
-        assertEquals(-1, TidyNumbers.findMaxUnSortedIndex("123"));
-        assertEquals(2, TidyNumbers.findMaxUnSortedIndex("1000"));
+    public void shouldFindFirstFailedIndex() {
+        assertEquals(1, TidyNumbers.findFirst("132"));
+        assertEquals(-1, TidyNumbers.findFirst("123"));
+        assertEquals(0, TidyNumbers.findFirst("1000"));
     }
 }
