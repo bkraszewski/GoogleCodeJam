@@ -2,11 +2,9 @@ package com.bkraszewski;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
 import java.util.PriorityQueue;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BathroomStallsTest {
 
@@ -62,6 +60,44 @@ class BathroomStallsTest {
         assertEquals(499, cabin.minLsRs);
     }
 
+    @Test
+    public void testAddingToQueue() {
+        PriorityQueue<BathroomStalls.Cabin> queue = new PriorityQueue<>(BathroomStalls.getComparator());
+
+        BathroomStalls.Cabin c1 = new BathroomStalls.Cabin(0, 9);
+        BathroomStalls.Cabin c2 = new BathroomStalls.Cabin(0, 4);
+        BathroomStalls.Cabin c3 = new BathroomStalls.Cabin(5, 9);
+
+        queue.add(c3);
+        queue.add(c2);
+        queue.add(c1);
+
+        assertEquals(c1, queue.poll());
+        assertEquals(c2, queue.poll());
+        assertEquals(c3, queue.poll());
+    }
+
+    @Test
+    public void testInternalCabin(){
+        BathroomStalls.Cabin c1 = new BathroomStalls.Cabin(0, 9);
+        c1.setupInternal();
+
+        assertEquals(4, c1.minLsRs);
+        assertEquals(5, c1.maxLsRs);
+
+        BathroomStalls.Cabin c2 = new BathroomStalls.Cabin(0, 1);
+        c2.setupInternal();
+
+        assertEquals(0, c2.minLsRs);
+        assertEquals(1, c2.maxLsRs);
+
+        BathroomStalls.Cabin c3 = new BathroomStalls.Cabin(0, 0);
+        c3.setupInternal();
+
+        assertEquals(0, c3.minLsRs);
+        assertEquals(0, c3.maxLsRs);
+    }
+
 //    @Test
 //    public void wtf() {
 //        int queueLenght = 745891;
@@ -80,75 +116,5 @@ class BathroomStallsTest {
 //        }
 //    }
 
-    @Test
-    public void wtf(){
-        PriorityQueue<BathroomStalls.Cabin> best = createBestComparator();
 
-        BathroomStalls.Cabin c1 = new BathroomStalls.Cabin(1);
-        c1.ls = 0;
-        c1.rs = 3;
-        c1.updateInternal();
-
-        BathroomStalls.Cabin c2 = new BathroomStalls.Cabin(2);
-        c2.ls = 1;
-        c2.rs = 2;
-        c2.updateInternal();
-
-        BathroomStalls.Cabin c3 = new BathroomStalls.Cabin(3);
-        c3.ls = 2;
-        c3.rs = 1;
-        c3.updateInternal();
-
-        BathroomStalls.Cabin c4 = new BathroomStalls.Cabin(4);
-        c4.ls = 3;
-        c4.rs = 0;
-        c4.updateInternal();
-
-        best.add(c1);
-        best.add(c2);
-        best.add(c3);
-        best.add(c4);
-
-        BathroomStalls.Cabin r = best.poll();
-        assertEquals(r.index, 2);
-
-
-        c1.ls = 0;
-        c1.rs = 0;
-        c1.updateInternal();
-        best.remove(c1);
-        best.add(c1);
-
-        c3.ls = 0;
-        c3.rs = 1;
-        c3.updateInternal();
-        best.remove(c3);
-        best.add(c3);
-
-        c4.ls = 1;
-        c4.rs = 0;
-        c4.updateInternal();
-        best.remove(c4);
-        best.add(c4);
-
-        r = best.poll();
-        assertEquals(r.index, 3);
-
-    }
-
-    private PriorityQueue<BathroomStalls.Cabin> createBestComparator() {
-        return new PriorityQueue<BathroomStalls.Cabin>((o1, o2) -> {
-                if (o2.p > o1.p) {
-                    return 1;
-                } else if (o2.p == o1.p) {
-                    if (o2.q == o1.q) {
-                        return o1.index - o2.index;
-                    }
-
-                    return o2.q - o1.q;
-                }
-
-                return o2.p - o1.p;
-            });
-    }
 }
